@@ -1,0 +1,9 @@
+com\ticketdesk\ticketservice\dto\TicketResponseDTO.class
+com\ticketdesk\ticketservice\client\UserClient.class
+com\ticketdesk\ticketservice\entity\Ticket$Status.class
+com\ticketdesk\ticketservice\entity\Ticket$Priority.class
+com\ticketdesk\ticketservice\TicketServiceApplication.class
+com\ticketdesk\ticketservice\controller\TicketController.class
+com\ticketdesk\ticketservice\repository\TicketRepository.class
+com\ticketdesk\ticketservice\dto\UserDTO.class
+com\ticketdesk\ticketservice\entity\Ticket.class

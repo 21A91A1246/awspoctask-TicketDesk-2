@@ -1,0 +1,58 @@
+{
+  "family": "ticket-service",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "containerDefinitions": [
+    {
+      "name": "ticket-service",
+      "image": "076648863714.dkr.ecr.eu-north-1.amazonaws.com/ticket-service:latest",
+      "portMappings": [
+        {
+          "containerPort": 8082,
+          "hostPort": 8082,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "DB_HOST",
+          "value": "ticketdesk-mysql.ch2ue6mwuudh.eu-north-1.rds.amazonaws.com"
+        },
+        {
+          "name": "DB_PORT",
+          "value": "3306"
+        },
+        {
+          "name": "DB_USER",
+          "value": "root"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "value": "rootpassword123"
+        },
+        {
+          "name": "USER_SERVICE_HOST",
+          "value": "user-service.local"
+        },
+        {
+          "name": "USER_SERVICE_PORT",
+          "value": "8085"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/ticket-service",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "ticket"
+        }
+      }
+    }
+  ],
+  "executionRoleArn": "arn:aws:iam::076648863714:role/ecsTaskExecutionRole"
+}

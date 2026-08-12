@@ -1,0 +1,66 @@
+{
+  "family": "api-gateway",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "containerDefinitions": [
+    {
+      "name": "api-gateway",
+      "image": "076648863714.dkr.ecr.eu-north-1.amazonaws.com/api-gateway:latest",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "USER_SERVICE_HOST",
+          "value": "user-service.local"
+        },
+        {
+          "name": "USER_SERVICE_PORT",
+          "value": "8085"
+        },
+        {
+          "name": "TICKET_SERVICE_HOST",
+          "value": "ticket-service.local"
+        },
+        {
+          "name": "TICKET_SERVICE_PORT",
+          "value": "8082"
+        },
+        {
+          "name": "COMMENT_SERVICE_HOST",
+          "value": "comment-service.local"
+        },
+        {
+          "name": "COMMENT_SERVICE_PORT",
+          "value": "8083"
+        },
+        {
+          "name": "ATTACHMENT_SERVICE_HOST",
+          "value": "attachment-service.local"
+        },
+        {
+          "name": "ATTACHMENT_SERVICE_PORT",
+          "value": "8084"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/api-gateway",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "gateway"
+        }
+      }
+    }
+  ],
+  "executionRoleArn": "arn:aws:iam::076648863714:role/ecsTaskExecutionRole"
+}

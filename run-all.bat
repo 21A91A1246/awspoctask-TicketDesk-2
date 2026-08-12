@@ -1,0 +1,19 @@
+@echo off
+echo Starting all TicketDesk Microservices locally...
+
+echo Starting User Service on port 8085...
+start "User Service" cmd /k "cd user-service && mvn spring-boot:run"
+
+echo Starting Ticket Service on port 8082...
+start "Ticket Service" cmd /k "cd ticket-service && mvn spring-boot:run"
+
+echo Starting Comment Service on port 8083...
+start "Comment Service" cmd /k "cd comment-service && mvn spring-boot:run"
+
+echo Starting Attachment Service on port 8084...
+start "Attachment Service" cmd /k "cd attachment-service && mvn spring-boot:run"
+
+echo Starting API Gateway on port 8080...
+start "API Gateway" cmd /k "cd api-gateway && mvn spring-boot:run"
+
+echo All startup commands initiated! Please inspect individual windows for successful compilation and database connection.

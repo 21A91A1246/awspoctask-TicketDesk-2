@@ -1,0 +1,7 @@
+com\ticketdesk\attachmentservice\AttachmentServiceApplication.class
+com\ticketdesk\attachmentservice\repository\AttachmentRepository.class
+com\ticketdesk\attachmentservice\controller\AttachmentController$PresignedUrlRequest.class
+com\ticketdesk\attachmentservice\entity\Attachment.class
+com\ticketdesk\attachmentservice\controller\AttachmentController.class
+com\ticketdesk\attachmentservice\controller\AttachmentController$PresignedUrlResponse.class
+com\ticketdesk\attachmentservice\client\TicketClient.class

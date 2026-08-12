@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: ticketdesk-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+
+  ticket-service:
+    build: ./ticket-service
+    container_name: ticket-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - USER_SERVICE_HOST=user-service
+      - USER_SERVICE_PORT=8085
+
+  comment-service:
+    build: ./comment-service
+    container_name: comment-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      ticket-service:
+        condition: service_started
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - USER_SERVICE_HOST=user-service
+      - USER_SERVICE_PORT=8085
+      - TICKET_SERVICE_HOST=ticket-service
+      - TICKET_SERVICE_PORT=8082
+
+  attachment-service:
+    build: ./attachment-service
+    container_name: attachment-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      ticket-service:
+        condition: service_started
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - TICKET_SERVICE_HOST=ticket-service
+      - TICKET_SERVICE_PORT=8082
+      - GATEWAY_URL=http://localhost:8080
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - ticket-service
+      - comment-service
+      - attachment-service
+    environment:
+      - USER_SERVICE_HOST=user-service
+      - USER_SERVICE_PORT=8085
+      - TICKET_SERVICE_HOST=ticket-service
+      - TICKET_SERVICE_PORT=8082
+      - COMMENT_SERVICE_HOST=comment-service
+      - COMMENT_SERVICE_PORT=8083
+      - ATTACHMENT_SERVICE_HOST=attachment-service
+      - ATTACHMENT_SERVICE_PORT=8084
+
+  frontend:
+    build: ./frontend
+    container_name: ticketdesk-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway

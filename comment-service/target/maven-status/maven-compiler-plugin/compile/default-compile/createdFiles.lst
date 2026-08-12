@@ -1,0 +1,8 @@
+com\ticketdesk\commentservice\client\UserClient.class
+com\ticketdesk\commentservice\controller\CommentController.class
+com\ticketdesk\commentservice\entity\Comment.class
+com\ticketdesk\commentservice\CommentServiceApplication.class
+com\ticketdesk\commentservice\repository\CommentRepository.class
+com\ticketdesk\commentservice\dto\CommentResponseDTO.class
+com\ticketdesk\commentservice\client\TicketClient.class
+com\ticketdesk\commentservice\dto\UserDTO.class

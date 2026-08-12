@@ -1,0 +1,6 @@
+com\ticketdesk\userservice\repository\UserRepository.class
+com\ticketdesk\userservice\entity\User.class
+com\ticketdesk\userservice\UserServiceApplication.class
+com\ticketdesk\userservice\controller\UserController.class
+com\ticketdesk\userservice\controller\UserController$LoginRequest.class
+com\ticketdesk\userservice\entity\User$Role.class
