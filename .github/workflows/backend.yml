@@ -1,4 +1,4 @@
-name: Backend CI/CD to ECR
+name: Backend CI/CD to ECR for ECS
 
 on:
   push:
