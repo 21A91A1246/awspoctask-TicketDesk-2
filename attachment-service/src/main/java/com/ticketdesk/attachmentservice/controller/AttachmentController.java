@@ -176,7 +176,7 @@ public class AttachmentController {
             uploadUrl = gatewayUrl + "/api/attachments/mock-s3-upload/" + request.getTicketId() + "/" + uniqueFileName;
             fileUrl = gatewayUrl + "/api/attachments/download/" + request.getTicketId() + "/" + uniqueFileName;
         } else {
-            fileUrl = gatewayUrl + "/attachments/uploads/" + uniqueFileName;
+            fileUrl = gatewayUrl + "/uploads/" + uniqueFileName;
         }
 
         attachment.setFileUrl(fileUrl);
