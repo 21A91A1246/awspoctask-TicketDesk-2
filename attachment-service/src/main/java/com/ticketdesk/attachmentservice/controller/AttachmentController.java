@@ -121,7 +121,7 @@ public class AttachmentController {
         }
     }
 
-    @PostMapping("/presigned-url")
+        @PostMapping("/presigned-url")
     public ResponseEntity<?> getPresignedUrl(@RequestBody PresignedUrlRequest request) {
         try {
             // Verify ticket exists
@@ -142,19 +142,12 @@ public class AttachmentController {
         String uploadUrl = null;
         boolean isMock = false;
 
-                if (s3Presigner != null) {
-                    try {
-                        String s3Key = "uploads/" + uniqueFileName;
-                        String contentType = request.getContentType() != null && !request.getContentType().isEmpty() 
-                                ? request.getContentType() 
-                                : "application/octet-stream";
-        
-                        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                                .bucket(bucketName)
-                                .key(s3Key)
-                                .contentType(contentType)
-                                .build();
-                }
+        if (s3Presigner != null) {
+            try {
+                String s3Key = "uploads/" + uniqueFileName;
+                String contentType = request.getContentType() != null && !request.getContentType().isEmpty() 
+                        ? request.getContentType() 
+                        : "application/octet-stream";
 
                 PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
