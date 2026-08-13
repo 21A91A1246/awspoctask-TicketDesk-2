@@ -70,9 +70,10 @@ public class AttachmentController {
 
     private static final String UPLOAD_DIR = "./uploads/";
 
-    public static class PresignedUrlRequest {
+        public static class PresignedUrlRequest {
         private Long ticketId;
         private String fileName;
+        private String contentType;
 
         public Long getTicketId() {
             return ticketId;
@@ -88,6 +89,14 @@ public class AttachmentController {
 
         public void setFileName(String fileName) {
             this.fileName = fileName;
+        }
+
+        public String getContentType() {
+            return contentType;
+        }
+
+        public void setContentType(String contentType) {
+            this.contentType = contentType;
         }
     }
 
@@ -133,12 +142,18 @@ public class AttachmentController {
         String uploadUrl = null;
         boolean isMock = false;
 
-        if (s3Presigner != null) {
-            try {
-                String s3Key = "uploads/" + uniqueFileName;
-                String contentType = request.getFileName().toLowerCase().endsWith(".png") ? "image/png" : "application/octet-stream";
-                if (request.getFileName().toLowerCase().endsWith(".jpg") || request.getFileName().toLowerCase().endsWith(".jpeg")) {
-                    contentType = "image/jpeg";
+                if (s3Presigner != null) {
+                    try {
+                        String s3Key = "uploads/" + uniqueFileName;
+                        String contentType = request.getContentType() != null && !request.getContentType().isEmpty() 
+                                ? request.getContentType() 
+                                : "application/octet-stream";
+        
+                        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                                .bucket(bucketName)
+                                .key(s3Key)
+                                .contentType(contentType)
+                                .build();
                 }
 
                 PutObjectRequest putObjectRequest = PutObjectRequest.builder()
