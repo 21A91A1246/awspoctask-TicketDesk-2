@@ -375,12 +375,13 @@ export default function App() {
     if (!uploadFile) return;
 
     try {
-      const presignedRes = await fetch(`${ATTACHMENT_SERVICE_URL}/presigned-url`, {
+            const presignedRes = await fetch(`${ATTACHMENT_SERVICE_URL}/presigned-url`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ticketId: selectedTicketId,
-          fileName: uploadFile.name
+          fileName: uploadFile.name,
+          contentType: uploadFile.type || 'application/octet-stream'
         })
       });
 
