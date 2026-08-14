@@ -121,7 +121,7 @@ public class AttachmentController {
         }
     }
 
-        @PostMapping("/presigned-url")
+    @PostMapping("/presigned-url")
     public ResponseEntity<?> getPresignedUrl(@RequestBody PresignedUrlRequest request) {
         try {
             // Verify ticket exists
@@ -161,8 +161,24 @@ public class AttachmentController {
                         .build();
 
                 PresignedPutObjectRequest presignedPutObjectRequest = s3Presigner.presignPutObject(presignRequest);
-                uploadUrl = presignedPutObjectRequest.url().toString();
-                log.info("Generated real S3 presigned URL for upload: {}", uploadUrl);
+                String s3Url = presignedPutObjectRequest.url().toString();
+                
+                try {
+                    java.net.URI s3Uri = new java.net.URI(s3Url);
+                    java.net.URI gwUri = new java.net.URI(gatewayUrl);
+                    java.net.URI rewrittenUri = new java.net.URI(
+                            gwUri.getScheme(),
+                            gwUri.getAuthority(),
+                            s3Uri.getPath(),
+                            s3Uri.getQuery(),
+                            s3Uri.getFragment()
+                    );
+                    uploadUrl = rewrittenUri.toString();
+                    log.info("Generated S3 presigned URL (rewritten to CloudFront to bypass Zscaler): {}", uploadUrl);
+                } catch (Exception uriEx) {
+                    log.warn("Failed to rewrite S3 URL, using direct S3 URL: {}", uriEx.getMessage());
+                    uploadUrl = s3Url;
+                }
             } catch (Exception e) {
                 log.error("Failed to generate S3 presigned URL, falling back to mock: {}", e.getMessage());
                 isMock = true;
